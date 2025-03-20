@@ -1,0 +1,43 @@
+name: 构建 Android 应用
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  main:
+    name: Release Android App
+    runs-on: ubuntu-latest
+    steps:
+      - name: 克隆仓库
+        uses: actions/checkout@v4
+
+      - name: 设置 Java 环境
+        uses: actions/setup-java@v4
+        with:
+          distribution: zulu
+          java-version: 17
+
+      - name: 将screct变量添加签名文件
+        run: |
+          echo ${{ secrets.KEYSTORE_BASE64 }}  | base64 --decode > ./android/app/bobomusic-keystore.jks
+          echo -e "${{ secrets.KEY_PROPERTIES }}" > ./android/key.properties
+          ls -lh ./android/app/bobomusic-keystore.jks
+          md5sum ./android/app/bobomusic-keystore.jks
+
+      - name: 安装 Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.27.1
+          channel: stable
+          cache: true
+
+      - name: 构建 APK
+        run: flutter build apk
+
+      - name: 推送到 release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ./build/app/outputs/flutter-apk/*
+          token: ${{ secrets.RELEASE_TOKEN  }}
