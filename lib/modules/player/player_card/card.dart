@@ -34,7 +34,7 @@ class PlayerCard extends StatefulWidget {
 class PlayerCardState extends State<PlayerCard> {
   bool isLike = false;
   String coverUrl = Covers.getRandomCover();
-  String errorCoverUrl = Covers.getLocalRandomCover();
+  String errorCoverUrl = Covers.getLocalCover();
   ImageProvider? _imageProvider;
   ImageStream? _imageStream;
   ImageInfo? _imageInfo;

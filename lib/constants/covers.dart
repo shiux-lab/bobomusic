@@ -9,10 +9,8 @@ class Covers {
     return covers[random.nextInt(covers.length)];
   }
 
-  static String getLocalRandomCover() {
-    final random = Random();
-
-    return Covers.local[random.nextInt(Covers.local.length)];
+  static String getLocalCover() {
+    return Covers.local[0];
   }
 
   static List<String> natural = [
