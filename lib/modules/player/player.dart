@@ -139,27 +139,9 @@ class PrevButtonState extends State<PrevButton> {
               return;
             }
 
-            if (!isLoading) {
-              player.prev();
-            }
-
-            setState(() {
-              isLoading = true;
-            });
-
-            if (player.current!.localPath.isEmpty) {
-              Timer(const Duration(seconds: 1), () {
-                setState(() {
-                  isLoading = false;
-                });
-              });
-            } else {
-              setState(() {
-                isLoading = false;
-              });
-            }
+            player.prev();
           },
-          icon: isLoading ? const InfiniteRotate(child: Icon(Icons.refresh)) : const Icon(Icons.skip_previous),
+          icon: const Icon(Icons.skip_previous),
         );
       },
     );
@@ -202,27 +184,9 @@ class NextButtonState extends State<NextButton> {
               return;
             }
 
-            if (!isLoading) {
-              player.next();
-            }
-
-            setState(() {
-              isLoading = true;
-            });
-
-            if (player.current!.localPath.isEmpty) {
-              Timer(const Duration(seconds: 1), () {
-                setState(() {
-                  isLoading = false;
-                });
-              });
-            } else {
-              setState(() {
-                isLoading = false;
-              });
-            }
+            player.next();
           },
-          icon: isLoading ? const InfiniteRotate(child: Icon(Icons.refresh)) : const Icon(Icons.skip_next),
+          icon: const Icon(Icons.skip_next),
         );
       },
     );
