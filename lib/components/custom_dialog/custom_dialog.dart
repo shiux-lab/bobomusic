@@ -29,7 +29,7 @@ class CustomDialog extends StatelessWidget {
           // 标题和关闭按钮区域
           if (title != null)
             Padding(
-              padding: const EdgeInsets.only(left: 20, top: 6, bottom: 2, right: 6),
+              padding: const EdgeInsets.only(left: 16, top: 4, bottom: 2),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -50,12 +50,12 @@ class CustomDialog extends StatelessWidget {
             ),
           // 内容区域
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 4),
             child: body,
           ),
           // 底部按钮区域
           Container(
-            padding: const EdgeInsets.only(top: 20, left: 20, right: 20, bottom: 16),
+            padding: const EdgeInsets.only(top: 12, left: 20, right: 20, bottom: 12),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
