@@ -4,7 +4,7 @@ import "package:bobomusic/components/add_to_order/add_to_order.dart";
 import "package:bobomusic/constants/cache_key.dart";
 import "package:bobomusic/db/db.dart";
 import "package:bobomusic/origin_sdk/origin_types.dart";
-import "package:bobomusic/utils/measure_text_width.dart";
+import "package:bobomusic/utils/check_name_valid.dart";
 import "package:bot_toast/bot_toast.dart";
 import "package:flutter/material.dart";
 import "package:shared_preferences/shared_preferences.dart";
@@ -20,28 +20,8 @@ Future<List<String>> getAllOrderList() async {
   return [TableName.musicLocal, TableName.musicILike, ...customOrderList];
 }
 
-Future<bool> checkNameValid({ required String newName, String? oldName }) async {
-  if (newName.isEmpty && (oldName != null && oldName.isEmpty)) {
-    BotToast.showText(text: "名称不能为空", duration: const Duration(seconds: 2));
-    return false;
-  }
-
-  if (newName == oldName) {
-    return true;
-  }
-
-  if (RegExp(r'^\d+$').hasMatch(newName)) {
-    BotToast.showText(text: "名称不能全是数字", duration: const Duration(seconds: 2));
-    return false;
-  }
-
-  if (RegExp(r'^\d+').hasMatch(newName)) {
-    BotToast.showText(text: "名称不能以数字开头", duration: const Duration(seconds: 2));
-    return false;
-  }
-
-  if (measureTextWidth(newName, const TextStyle(fontSize: 14)) < 16) {
-    BotToast.showText(text: "名称长度太短", duration: const Duration(seconds: 2));
+Future<bool> checkOrderName({ required String newName, String? oldName }) async {
+  if (!checkNameValid(newName, oldName)) {
     return false;
   }
 
@@ -107,7 +87,7 @@ Future<List<MusicItem>> findMusicFromNotLocalOrders({required String param}) asy
 
   for (var order in [TableName.musicILike, ...list]) {
     final dbMusics = await db.queryByParam(order, param);
-   
+
     if (dbMusics.isNotEmpty) {
       for (var dbm in dbMusics) {
         final musicItem = row2MusicItem(dbRow: dbm);
@@ -127,7 +107,7 @@ Future<List<MusicItem>> findMusicFromLocalOrders({required String param}) async 
   List<MusicItem> musics = [];
 
   final dbMusics = await db.queryByParam(TableName.musicLocal, param);
-  
+
   if (dbMusics.isNotEmpty) {
     for (var dbm in dbMusics) {
       final musicItem = row2MusicItem(dbRow: dbm);
@@ -149,7 +129,7 @@ Future<List<MusicItem>> getUpdatedMusicList({required String tabName}) async {
   try {
     final dbMusics = await db.queryAll(tabName, groupBy: isWaitPlay ? "playId" : "name", needOrder: isWaitPlay ? false : true);
     final len = dbMusics.length;
-    
+
     if (dbMusics.isNotEmpty) {
       for (int index = 0; index < len; index++) {
         final isLast = dbMusics[index]["playId"] == dbMusics.last["playId"];
@@ -166,7 +146,7 @@ Future<List<MusicItem>> getUpdatedMusicList({required String tabName}) async {
             isFirst: index == 0 ? "true" : "false",
             isLast: isLast ? "true" : "false",
           );
-        
+
           newMusicList.add(newM);
           await db.update(tabName, musicItem2Row(music: newM));
         } else {

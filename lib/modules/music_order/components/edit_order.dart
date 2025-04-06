@@ -77,7 +77,7 @@ class EditMusicOrderState extends State<EditMusicOrder> {
 
                             final orderList = await getAllOrderList();
                             setCurrentTabIndex(index: orderList.length - 1);
-                            
+
                             if (context.mounted) {
                               Navigator.of(context).pop();
                               Navigator.of(context).pop();
@@ -125,7 +125,7 @@ class EditMusicOrderState extends State<EditMusicOrder> {
             child: FilledButton(
               onPressed: () async {
                 try {
-                  if (await checkNameValid(newName: _nameController.text, oldName: widget.name)) {
+                  if (await checkOrderName(newName: _nameController.text, oldName: widget.name)) {
                     bool success = false;
                     if (_isCreate) {
                       success = await setCustomOrderItem(newName: _nameController.text);
@@ -134,7 +134,7 @@ class EditMusicOrderState extends State<EditMusicOrder> {
                       success = await setCustomOrderItem(newName: _nameController.text.trim(), oldName: widget.name);
                       await db.updateTableName(oldTableName: widget.name, newTableName: _nameController.text);
                     }
-                    
+
                     if (success) {
                       widget.update();
 
