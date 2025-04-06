@@ -31,7 +31,7 @@ class VinylRecordWidgetState extends State<VinylRecordWidget>
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: const Duration(seconds: 20),
+      duration: const Duration(seconds: 30),
       vsync: this,
     );
 

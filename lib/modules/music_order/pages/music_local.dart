@@ -151,7 +151,7 @@ class MusicLocalState extends State<MusicLocal> {
           cover: "",
           name: audioFile.title,
           duration: (audioFile.duration / 1000).floor(),
-          author: audioFile.artist,
+          author: audioFile.artist == "Unknown" ? "未知歌手" : audioFile.artist,
           origin: OriginType.local,
           playId: uuid.v4(),
           orderName: TableName.musicLocal,
