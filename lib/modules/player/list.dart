@@ -1,6 +1,7 @@
 import "package:bobomusic/components/music_list_tile/music_list_tile.dart";
 import "package:bobomusic/modules/download/model.dart";
 import "package:bobomusic/modules/music_order/utils.dart";
+import "package:bobomusic/utils/check_music_local_repeat.dart";
 import "package:flutter/material.dart";
 import "package:bobomusic/components/sheet/bottom_sheet.dart";
 import "package:bobomusic/modules/player/model.dart";
@@ -103,7 +104,6 @@ _buildList(context, player, h) {
 
 void showItemSheet(BuildContext context, MusicItem data) {
   final playerModel = Provider.of<PlayerModel>(context, listen: false);
-  final downloadModel = Provider.of<DownloadModel>(context, listen: false);
   openBottomSheet(context, [
     SheetItem(
       title: Text(
@@ -136,7 +136,10 @@ void showItemSheet(BuildContext context, MusicItem data) {
     SheetItem(
       title: const Text("下载"),
       onPressed: () {
-        downloadModel.download([data]);
+        checkMusicLocalRepeat(context, data, () {
+          final downloadModel = Provider.of<DownloadModel>(context, listen: false);
+          downloadModel.download([data]);
+        });
       },
     ),
   ]);

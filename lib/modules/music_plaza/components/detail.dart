@@ -4,6 +4,7 @@ import "package:bobomusic/components/music_list_tile/music_list_tile.dart";
 import "package:bobomusic/db/db.dart";
 import "package:bobomusic/modules/download/model.dart";
 import "package:bobomusic/modules/music_order/utils.dart";
+import "package:bobomusic/utils/check_music_local_repeat.dart";
 import "package:bot_toast/bot_toast.dart";
 import "package:flutter/material.dart";
 import "package:bobomusic/components/sheet/bottom_sheet.dart";
@@ -52,7 +53,7 @@ class MusicOrderDetailState extends State<MusicOrderDetail> {
       });
     }
   }
-  
+
   Future<void> _loadData() async {
     EasyLoading.show(maskType: EasyLoadingMaskType.black);
     try {
@@ -104,7 +105,10 @@ class MusicOrderDetailState extends State<MusicOrderDetail> {
       SheetItem(
         title: const Text("下载"),
         onPressed: () {
-          Provider.of<DownloadModel>(context, listen: false).download([item]);
+          checkMusicLocalRepeat(context, item, () {
+            final downloadModel = Provider.of<DownloadModel>(context, listen: false);
+            downloadModel.download([item]);
+          });
         },
       ),
     ]);

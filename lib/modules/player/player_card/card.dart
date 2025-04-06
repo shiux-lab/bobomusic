@@ -10,6 +10,7 @@ import "package:bobomusic/modules/download/model.dart";
 import "package:bobomusic/modules/player/player_card/vinyl_record.dart";
 import "package:bobomusic/modules/player/utils.dart";
 import "package:bobomusic/origin_sdk/origin_types.dart";
+import "package:bobomusic/utils/check_music_local_repeat.dart";
 import "package:bot_toast/bot_toast.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
@@ -236,9 +237,10 @@ class PlayerCardState extends State<PlayerCard> {
                 return;
               }
 
-              final downloadModel =
-                  Provider.of<DownloadModel>(context, listen: false);
-              downloadModel.download([musicItem]);
+              checkMusicLocalRepeat(context, musicItem, () {
+                final downloadModel = Provider.of<DownloadModel>(context, listen: false);
+                downloadModel.download([musicItem]);
+              });
             },
           ),
           InkWell(

@@ -4,6 +4,7 @@ import "package:bobomusic/components/sheet/bottom_sheet.dart";
 import "package:bobomusic/constants/cache_key.dart";
 import "package:bobomusic/modules/download/model.dart";
 import "package:bobomusic/modules/music_order/utils.dart";
+import "package:bobomusic/utils/check_music_local_repeat.dart";
 import "package:cached_network_image/cached_network_image.dart";
 import "package:flutter/material.dart";
 import "package:bobomusic/components/text_tags/tags.dart";
@@ -90,7 +91,10 @@ class SearchViewState extends State<SearchView> {
       SheetItem(
         title: const Text("下载"),
         onPressed: () {
-          Provider.of<DownloadModel>(context, listen: false).download([music]);
+          checkMusicLocalRepeat(context, music, () {
+            final downloadModel = Provider.of<DownloadModel>(context, listen: false);
+            downloadModel.download([music]);
+          });
         },
       ),
       SheetItem(
@@ -374,7 +378,7 @@ class _SearchFormState extends State<_SearchForm> {
           widget.onSearch();
           return;
         }
-  
+
         widget.onInput(value);
       },
     );

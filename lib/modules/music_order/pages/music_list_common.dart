@@ -9,6 +9,7 @@ import "package:bobomusic/modules/music_order/components/edit_music.dart";
 import "package:bobomusic/modules/music_order/utils.dart";
 import "package:bobomusic/modules/player/model.dart";
 import "package:bobomusic/origin_sdk/origin_types.dart";
+import "package:bobomusic/utils/check_music_local_repeat.dart";
 import "package:bot_toast/bot_toast.dart";
 import "package:flutter/material.dart";
 import "package:flutter_easyloading/flutter_easyloading.dart";
@@ -101,7 +102,6 @@ class MusicListCommonState extends State<MusicListCommon> {
 
   void showItemSheet(BuildContext context, MusicItem musicItem) {
     final player = Provider.of<PlayerModel>(context, listen: false);
-    final downloadModel = Provider.of<DownloadModel>(context, listen: false);
     openBottomSheet(context, [
       SheetItem(
         title: Text(
@@ -174,7 +174,10 @@ class MusicListCommonState extends State<MusicListCommon> {
       SheetItem(
         title: const Text("下载"),
         onPressed: () {
-          downloadModel.download([musicItem]);
+          checkMusicLocalRepeat(context, musicItem, () {
+            final downloadModel = Provider.of<DownloadModel>(context, listen: false);
+            downloadModel.download([musicItem]);
+          });
         },
       ),
     ]);
